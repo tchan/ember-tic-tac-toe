@@ -18,24 +18,44 @@
   {{/paper-dialog}}
 {{/if}}
 
+{{#if showReset}}
+{{#paper-dialog class="flex-77" escapeToClose=false focusOnOpen=false}}
+  {{#paper-toolbar}}
+    {{#paper-toolbar-tools}}
+      <span class="flex-5"></span><h2>You won!</h2>
+    {{/paper-toolbar-tools}}
+  {{/paper-toolbar}}
+
+  {{#paper-dialog-content }}
+      <p>Do you want to play again?</p>
+  {{/paper-dialog-content}}
+  {{#paper-dialog-actions class="layout-row"}}
+    {{#paper-button onClick=(action "reset")}}Yes{{/paper-button}}
+    {{#paper-button onClick=(action "quit") }}No{{/paper-button}}
+  {{/paper-dialog-actions}}
+{{/paper-dialog}}
+{{/if}}
+{{log 'winningCombo' winningCombo}}
+
   <h1 class="text-center">Tic Tac Toe</h1>
   <div class="board-container">
     <div class="row">
-      <div class="box text-center" {{action 'markBox' playerOne 'one'}}>{{one}}</div>
-      <div class="box text-center" {{action 'markBox' playerOne 'two'}}>{{two}}</div>
-      <div class="box text-center" {{action 'markBox' playerOne 'three'}}>{{three}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'one' 1}}>{{one}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'two' 2}}>{{two}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'three' 3}}>{{three}}</div>
     </div>
     <div class="row">
-      <div class="box text-center" {{action 'markBox' playerOne 'four'}}>{{four}}</div>
-      <div class="box text-center" {{action 'markBox' playerOne 'five'}}>{{five}}</div>
-      <div class="box text-center" {{action 'markBox' playerOne 'six'}}>{{six}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'four' 4}}>{{four}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'five' 5}}>{{five}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'six' 6}}>{{six}}</div>
     </div>
     <div class="row">
-      <div class="box text-center" {{action 'markBox' playerOne 'seven'}}>{{seven}}</div>
-      <div class="box text-center" {{action 'markBox' playerOne 'eight'}}>{{eight}}</div>
-      <div class="box text-center" {{action 'markBox' playerOne 'nine'}}>{{nine}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'seven' 7}}>{{seven}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'eight' 8}}>{{eight}}</div>
+      <div class="box text-center" {{action 'markBox' playerOne 'nine' 9}}>{{nine}}</div>
     </div>
   </div>
+
   <br>
   <p class="text-center"><a href="https://github.com/tchan/ember-tic-tac-toe">View Source</a></p>
 </div>
