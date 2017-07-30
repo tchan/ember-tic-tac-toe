@@ -1,0 +1,15 @@
+{{#paper-dialog class="flex-77" escapeToClose=false focusOnOpen=false}}
+  {{#paper-toolbar}}
+    {{#paper-toolbar-tools}}
+      <span class="flex-5"></span><h2>You {{outcome}}!</h2>
+    {{/paper-toolbar-tools}}
+  {{/paper-toolbar}}
+
+  {{#paper-dialog-content }}
+      <p>Do you want to play again?</p>
+  {{/paper-dialog-content}}
+  {{#paper-dialog-actions class="layout-row"}}
+    {{#paper-button onClick=(action "reset")}}Yes{{/paper-button}}
+    {{#paper-button onClick=(action "quit") }}No{{/paper-button}}
+  {{/paper-dialog-actions}}
+{{/paper-dialog}}

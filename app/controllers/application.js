@@ -22,17 +22,33 @@ function checkIfWon(combo, symbol) {
   return false;
 }
 
+// returns a position on the board eg: 'one'
+function computerPlay(board) {
+
+   //create vacant spaces object
+   let vacantBoxes = [];
+   for (var key in board) {
+     if (board[key] === null) {
+       vacantBoxes.push(key);
+     }
+   }
+   let random = Math.floor(Math.random()*vacantBoxes.length);
+   return vacantBoxes[random];
+}
+
 export default Ember.Controller.extend({
   showDialog: true,
   playerOne: null,
   computer: null,
 
   showReset: false,
+  outcome: null,
 
   startingPlayer: computed('playerOne', function() {
     let playerOne = get(this, 'playerOne');
     return playerOne;
   }),
+
   //board values
   one: null,
   two: null,
@@ -57,6 +73,7 @@ export default Ember.Controller.extend({
 
   xPlayed: [],
   oPlayed: [],
+  computerPlayed: [],
   //xPlayed: Ember.A([]),
 
   // sortedXCombos: computed('xPlayed.[]', function() {
@@ -87,36 +104,87 @@ export default Ember.Controller.extend({
 
     markBox(symbol, box, number) {
       // console.log('number', number);
-
-      set(this, box, symbol);
       let xPlayed = get(this, 'xPlayed');
       let oPlayed = get(this, 'oPlayed');
       let winningCombo = get(this, 'winningCombo');
 
-      if (symbol === 'X') {
+      if (symbol === 'X' && get(this, box) === null) {
+        set(this, box, symbol);
         xPlayed.pushObject(number);
         let won = checkIfWon(winningCombo, xPlayed);
         if (won) {
+          set(this, 'outcome', 'won');
           set(this, 'showReset', true);
+        }
+        else {
+
+          let computerSymbol = get(this, 'computer');
+          //wow this is shit...current board state
+          let board = { 'one': get(this, 'one'), 'two': get(this, 'two'), 'three': get(this, 'three'),
+                        'four': get(this, 'four'), 'five': get(this, 'five'), 'six': get(this, 'six'),
+                        'seven': get(this, 'seven'), 'eight': get(this, 'eight'), 'nine': get(this, 'nine')
+                      };
+
+          let boardMap = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9};
+
+          //computer fills in a random space
+          let computerMarked = computerPlay(board);
+          let computerPlayed = get(this, 'computerPlayed');
+          computerPlayed.pushObject(boardMap[computerMarked]);
+          set(this, computerMarked, computerSymbol);
+          let computerWon = checkIfWon(winningCombo, computerPlayed);
+          if (computerWon) {
+            set(this, 'outcome', 'lost');
+            set(this, 'showReset', true);
+          }
+
         }
       }
 
-      if (symbol === 'O') {
+      if (symbol === 'O' && get(this, box) === null) {
+        set(this, box, symbol);
         oPlayed.pushObject(number);
         let won = checkIfWon(winningCombo, oPlayed);
         if (won) {
           set(this, 'showReset', true);
         }
+        else {
+          //next turn
+          let computerSymbol = get(this, 'computer');
+          //wow this is shit...current board state
+          let board = { 'one': get(this, 'one'), 'two': get(this, 'two'), 'three': get(this, 'three'),
+                        'four': get(this, 'four'), 'five': get(this, 'five'), 'six': get(this, 'six'),
+                        'seven': get(this, 'seven'), 'eight': get(this, 'eight'), 'nine': get(this, 'nine')
+                      };
+
+          let boardMap = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9};
+
+          //computer fills in a random space
+          let computerMarked = computerPlay(board);
+          let computerPlayed = get(this, 'computerPlayed');
+          computerPlayed.pushObject(boardMap[computerMarked]);
+          set(this, computerMarked, computerSymbol);
+          let computerWon = checkIfWon(winningCombo, computerPlayed);
+          if (computerWon) {
+            set(this, 'outcome', 'lost');
+            set(this, 'showReset', true);
+          }
+        }
       }
     },
 
     quit() {
-      console.log('quit');
+      set(this, 'showReset', false);
     },
 
     reset() {
-      console.log('reset');
-    }
+      set(this, 'showReset', false);
+      set(this, 'outcome', null);
+      set(this, 'xPlayed', Ember.A());
+      set(this, 'oPlayed', Ember.A());
+      set(this, 'computerPlayed', Ember.A());
+      this.setProperties({ one: null, two: null, three: null, four: null, five: null, six: null, seven: null, eight: null, nine: null });
+    },
 
   }
 });

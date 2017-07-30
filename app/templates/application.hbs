@@ -19,23 +19,8 @@
 {{/if}}
 
 {{#if showReset}}
-{{#paper-dialog class="flex-77" escapeToClose=false focusOnOpen=false}}
-  {{#paper-toolbar}}
-    {{#paper-toolbar-tools}}
-      <span class="flex-5"></span><h2>You won!</h2>
-    {{/paper-toolbar-tools}}
-  {{/paper-toolbar}}
-
-  {{#paper-dialog-content }}
-      <p>Do you want to play again?</p>
-  {{/paper-dialog-content}}
-  {{#paper-dialog-actions class="layout-row"}}
-    {{#paper-button onClick=(action "reset")}}Yes{{/paper-button}}
-    {{#paper-button onClick=(action "quit") }}No{{/paper-button}}
-  {{/paper-dialog-actions}}
-{{/paper-dialog}}
+  {{end-game-modal outcome=outcome quit='quit' reset='reset'}}
 {{/if}}
-{{log 'winningCombo' winningCombo}}
 
   <h1 class="text-center">Tic Tac Toe</h1>
   <div class="board-container">
