@@ -153,6 +153,7 @@ export default Ember.Controller.extend({
         oPlayed.pushObject(number);
         let won = checkIfWon(winningCombo, oPlayed);
         if (won) {
+          set(this, 'outcome', 'won');
           set(this, 'showReset', true);
         }
         else {
