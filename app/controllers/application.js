@@ -1,10 +1,6 @@
 import Ember from 'ember';
 const { get, set, computed } = Ember;
 
-function sortNumber(a,b) {
-    return a - b;
-}
-
 function checkIfWon(combo, symbol) {
   for (var i=0; i<combo.length; i++) {
     //loop through each array winning combo
@@ -32,8 +28,11 @@ function computerPlay(board) {
        vacantBoxes.push(key);
      }
    }
-   let random = Math.floor(Math.random()*vacantBoxes.length);
-   return vacantBoxes[random];
+   if (vacantBoxes.length !==0) {
+     let random = Math.floor(Math.random()*vacantBoxes.length);
+     return vacantBoxes[random];
+   }
+
 }
 
 export default Ember.Controller.extend({
@@ -104,6 +103,9 @@ export default Ember.Controller.extend({
 
     markBox(symbol, box, number) {
       // console.log('number', number);
+      if ((get(this, 'hasQuit'))) {
+        return ;
+      }
       let xPlayed = get(this, 'xPlayed');
       let oPlayed = get(this, 'oPlayed');
       let winningCombo = get(this, 'winningCombo');
@@ -131,13 +133,18 @@ export default Ember.Controller.extend({
           let computerMarked = computerPlay(board);
           let computerPlayed = get(this, 'computerPlayed');
           computerPlayed.pushObject(boardMap[computerMarked]);
-          set(this, computerMarked, computerSymbol);
-          let computerWon = checkIfWon(winningCombo, computerPlayed);
-          if (computerWon) {
-            set(this, 'outcome', 'lost');
+          if (computerMarked === undefined) {
+            set(this, 'outcome', 'draw');
             set(this, 'showReset', true);
           }
-
+          else {
+            set(this, computerMarked, computerSymbol);
+            let computerWon = checkIfWon(winningCombo, computerPlayed);
+            if (computerWon) {
+              set(this, 'outcome', 'lost');
+              set(this, 'showReset', true);
+            }
+          }
         }
       }
 
@@ -163,11 +170,17 @@ export default Ember.Controller.extend({
           let computerMarked = computerPlay(board);
           let computerPlayed = get(this, 'computerPlayed');
           computerPlayed.pushObject(boardMap[computerMarked]);
-          set(this, computerMarked, computerSymbol);
-          let computerWon = checkIfWon(winningCombo, computerPlayed);
-          if (computerWon) {
-            set(this, 'outcome', 'lost');
+          if (computerMarked === undefined) {
+            set(this, 'outcome', 'draw');
             set(this, 'showReset', true);
+          }
+          else {
+            set(this, computerMarked, computerSymbol);
+            let computerWon = checkIfWon(winningCombo, computerPlayed);
+            if (computerWon) {
+              set(this, 'outcome', 'lost');
+              set(this, 'showReset', true);
+            }
           }
         }
       }
@@ -175,6 +188,7 @@ export default Ember.Controller.extend({
 
     quit() {
       set(this, 'showReset', false);
+      set(this, 'hasQuit', true);
     },
 
     reset() {
